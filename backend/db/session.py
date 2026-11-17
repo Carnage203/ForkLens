@@ -67,8 +67,13 @@ class Database:
             session.close()
 
     def create_all(self) -> None:
-        """Create missing tables (idempotent)."""
+        """Create missing tables (idempotent). On Postgres also enable Row Level Security with no policies, so the
+        tables cannot be reached through Supabase's public REST API (the backend's own role bypasses RLS)."""
         Base.metadata.create_all(self._engine)
+        if self.dialect == "postgresql":
+            with self._engine.begin() as conn:
+                for table in Base.metadata.sorted_tables:
+                    conn.execute(text(f"ALTER TABLE {table.name} ENABLE ROW LEVEL SECURITY"))
 
     def ping(self) -> bool:
         """True when the database answers a trivial query."""
