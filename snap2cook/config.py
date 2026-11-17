@@ -1,4 +1,4 @@
-"""Application settings read from Streamlit secrets, environment variables or .env."""
+"""Application settings read from environment variables or a local .env (never hardcoded)."""
 from __future__ import annotations
 
 import os
@@ -12,17 +12,6 @@ from dotenv import dotenv_values
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def _from_streamlit_secrets(key: str) -> str | None:
-    """Return a value from ``st.secrets`` or None if unavailable."""
-    try:
-        import streamlit as st
-
-        value = st.secrets.get(key)
-    except Exception:  # no secrets file / not running under Streamlit
-        return None
-    return str(value) if value not in (None, "") else None
-
-
 def _csv(value: str) -> tuple[str, ...]:
     """Split a comma-separated setting into a tuple of non-empty items."""
     return tuple(m.strip() for m in value.split(",") if m.strip())
@@ -30,7 +19,23 @@ def _csv(value: str) -> tuple[str, ...]:
 
 @dataclass(frozen=True)
 class Settings:
-    """Immutable configuration. The API key is hidden from ``repr``."""
+    """Immutable configuration. Every secret is hidden from ``repr``."""
+
+    env: str = "dev"
+    database_url: str = field(default="", repr=False)
+    supabase_url: str = ""
+    supabase_anon_key: str = ""  # public by design (shipped to the browser)
+    admin_username: str = ""
+    admin_password: str = field(default="", repr=False)
+    admin_jwt_secret: str = field(default="", repr=False)
+    cron_secret: str = field(default="", repr=False)
+    corpus_source: str = "local"  # "local" (fast cold start) or "cloud" (Hugging Face, local fallback)
+    allowed_origins: tuple[str, ...] = ("http://localhost:5173", "http://127.0.0.1:5173")
+    guest_gen_limit: int = 6
+    user_gen_limit: int = 20
+    guest_scan_limit: int = 12
+    user_scan_limit: int = 40
+    ip_limit_factor: int = 3
 
     gemini_api_key: str = field(default="", repr=False)
     vision_model: str = "gemini-4-hydrogen"
@@ -64,6 +69,16 @@ class Settings:
         """True when a Gemini key is configured."""
         return bool(self.gemini_api_key)
 
+    @property
+    def admin_enabled(self) -> bool:
+        """The admin console exists only when username, password and a strong JWT secret are all set."""
+        return bool(self.admin_username and self.admin_password and len(self.admin_jwt_secret) >= 24)
+
+    @property
+    def auth_enabled(self) -> bool:
+        """Supabase login is offered only when both its URL and public key are configured."""
+        return bool(self.supabase_url and self.supabase_anon_key)
+
     @classmethod
     def load(cls, overrides: Mapping[str, str] | None = None) -> "Settings":
         """Build settings: st.secrets, then os.environ, then .env (local only)."""
@@ -72,7 +87,7 @@ class Settings:
         def get(key: str, default: str = "") -> str:
             if overrides and overrides.get(key):
                 return str(overrides[key])
-            for source in (_from_streamlit_secrets(key), os.environ.get(key), dotenv.get(key)):
+            for source in (os.environ.get(key), dotenv.get(key)):
                 if source:
                     return str(source)
             return default
@@ -91,4 +106,16 @@ class Settings:
             embed_model=get("EMBED_MODEL", defaults.embed_model),
             embed_dim=int(get("EMBED_DIM", str(defaults.embed_dim))),
             hf_dataset_repo=get("HF_DATASET_REPO"),
+            env="prod" if (get("VERCEL") or get("APP_ENV") == "prod") else "dev",
+            database_url=get("DATABASE_URL"),
+            supabase_url=get("SUPABASE_URL").rstrip("/"),
+            supabase_anon_key=get("SUPABASE_ANON_KEY"),
+            admin_username=get("ADMIN_USERNAME"),
+            admin_password=get("ADMIN_PASSWORD"),
+            admin_jwt_secret=get("ADMIN_JWT_SECRET"),
+            cron_secret=get("CRON_SECRET"),
+            corpus_source=get("CORPUS_SOURCE", defaults.corpus_source),
+            allowed_origins=_csv(get("ALLOWED_ORIGINS", ",".join(defaults.allowed_origins))),
+            guest_gen_limit=int(get("GUEST_GEN_LIMIT", str(defaults.guest_gen_limit))),
+            user_gen_limit=int(get("USER_GEN_LIMIT", str(defaults.user_gen_limit))),
         )

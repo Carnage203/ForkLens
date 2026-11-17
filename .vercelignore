@@ -1,0 +1,13 @@
+.venv/
+venv/
+logs/
+*.db
+.pytest_cache/
+__pycache__/
+frontend/node_modules/
+frontend/dist/
+documentation.md
+Changes.md
+.env
+.env.*
+!.env.example

@@ -1,6 +1,7 @@
 """Shared helpers for calling the Gemini API: client factory and retry policy."""
 from __future__ import annotations
 
+import contextvars
 import logging
 import random
 import time
@@ -19,6 +20,8 @@ T = TypeVar("T")
 _FATAL_CODES = {400, 401, 403, 404}
 COOLDOWN_S = 90.0
 _cooldown_until: dict[str, float] = {}  # model -> time before which it is skipped after a failure
+# Per-request scratchpad: which model answered each stage ("vision", "generation"). Set by the API layer.
+served_models: contextvars.ContextVar[dict[str, str] | None] = contextvars.ContextVar("served_models", default=None)
 
 
 def build_client(settings: Settings) -> genai.Client:
@@ -73,7 +76,11 @@ def call_with_model_fallback(models: tuple[str, ...], call: Callable[[str], T], 
             log.info("skipping %s (recent failure)", model)
             continue
         try:
-            return call_with_retries(lambda: call(model), error_cls, f"{what} [{model}]", retries if last else 0)
+            result = call_with_retries(lambda: call(model), error_cls, f"{what} [{model}]", retries if last else 0)
+            scratch = served_models.get()
+            if scratch is not None:
+                scratch[what.split()[0].lower()] = model
+            return result
         except error_cls as exc:
             last_error = exc
             _cooldown_until[model] = time.monotonic() + COOLDOWN_S

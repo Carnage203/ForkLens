@@ -1,6 +1,7 @@
 """Pipeline: orchestrates vision -> retrieval -> generation. All collaborators are injected."""
 from __future__ import annotations
 
+import contextvars
 import hashlib
 import json
 import logging
@@ -16,7 +17,7 @@ from snap2cook.config import Settings
 from snap2cook.exceptions import GenerationError, NoIngredientsDetectedError
 from snap2cook.limiter import RateLimiter
 from snap2cook.models import Conditions, GeneratedRecipe, PipelineResult
-from snap2cook.rag.generator import GenerationContext, Generator, VerbatimGenerator
+from snap2cook.rag.generator import GenerationContext, Generator, VerbatimGenerator, recipe_to_generated
 from snap2cook.rag.retriever import Retriever
 from snap2cook.tiers import Tier
 from snap2cook.vision.base import VisionProvider
@@ -31,22 +32,26 @@ class Pipeline:
 
     def __init__(self, vision: VisionProvider, retriever: Retriever, generator: Generator,
                  normalizer: IngredientNormalizer, cache: Cache, limiter: RateLimiter,
-                 settings: Settings, fallback_generator: Generator | None = None) -> None:
+                 settings: Settings, fallback_generator: Generator | None = None,
+                 scan_limiter: RateLimiter | None = None) -> None:
         self._vision, self._retriever, self._generator = vision, retriever, generator
         self._normalizer, self._cache, self._limiter, self._settings = normalizer, cache, limiter, settings
         self._fallback = fallback_generator or VerbatimGenerator()
+        self._scan_limiter = scan_limiter
 
     @property
     def mode(self) -> str:
         """'live' when the vision provider is not the mock."""
         return "mock" if self._vision.name == "mock" else "live"
 
-    def detect(self, image: PreparedImage) -> tuple[pd.Series, bool]:
-        """Detect ingredients (cached by image hash). Returns (Series, cache_hit)."""
+    def detect(self, image: PreparedImage, session_id: str = "") -> tuple[pd.Series, bool]:
+        """Detect ingredients (cached by image hash). Returns (Series, cache_hit). Only cache misses use quota."""
         key = f"vision:{self._vision.name}:{image.sha256}"
         cached = self._cache.get(key)
         if cached is not None:
             return pd.Series(cached, name="confidence", dtype=float), True
+        if self._scan_limiter is not None:
+            self._scan_limiter.check(session_id)
         items = self._normalizer.normalize_all(self._vision.detect(image.data))
         series = ingredient_series(items)
         if series.empty:
@@ -54,20 +59,21 @@ class Pipeline:
         self._cache.set(key, series.to_dict(), self._settings.vision_ttl_s)
         return series, False
 
-    def detect_many(self, images: Sequence[PreparedImage]) -> tuple[pd.Series, int]:
+    def detect_many(self, images: Sequence[PreparedImage], session_id: str = "") -> tuple[pd.Series, int]:
         """Detect across several photos (each cached) and merge. Returns (Series, photos_with_no_items).
 
         A photo with nothing recognisable is skipped; the call fails only if every photo is empty.
         """
         def run(image: PreparedImage) -> pd.Series | None:
             try:
-                return self.detect(image)[0]
+                return self.detect(image, session_id)[0]
             except NoIngredientsDetectedError:
                 return None
 
         batch = list(images[: self._settings.max_photos])
         with ThreadPoolExecutor(max_workers=max(1, len(batch))) as pool:  # photos are independent API calls
-            results = list(pool.map(run, batch))
+            futures = [pool.submit(contextvars.copy_context().run, run, image) for image in batch]
+            results = [future.result() for future in futures]
         parts = [r for r in results if r is not None]
         empty = len(results) - len(parts)
         merged = merge_ingredient_series(parts)
@@ -102,6 +108,7 @@ class Pipeline:
         available = frozenset(tier.available(names, extra_names))
         fallback_used = False
         recipe: GeneratedRecipe | None = None
+        alternatives: list[GeneratedRecipe] = []
         if result.recipes:
             ctx = GenerationContext(tier, conditions, available, tuple(result.recipes))
             self._limiter.check(session_id)
@@ -113,13 +120,15 @@ class Pipeline:
                 recipe = self._fallback.generate(ctx)
                 fallback_used = True
             timings["generate_s"] = time.perf_counter() - start
+            used = set(recipe.source_recipe_ids)
+            alternatives = [recipe_to_generated(s, ctx) for s in result.recipes if s.recipe.id not in used][:2]
 
         candidates = [{"id": s.recipe.id, "title": s.recipe.title, "similarity": round(s.similarity, 3),
                        "coverage": round(s.coverage, 2), "missing": list(s.missing), "score": round(s.score, 3)}
                       for s in result.recipes]
         out = PipelineResult(recipe, series, result.scores, timings,
                              {"query_embedding": result.cache_hit, "recipe": False},
-                             fallback_used, result.suggestions, candidates, f"{self.mode}/{result.embedder}")
+                             fallback_used, result.suggestions, candidates, f"{self.mode}/{result.embedder}", alternatives)
         self._cache.set(key, out.to_cache(), self._settings.recipe_ttl_s)
         return out
 
@@ -127,4 +136,5 @@ class Pipeline:
         recipe = GeneratedRecipe(**cached["recipe"]) if cached["recipe"] else None
         scores = score_series(cached["scores"].items())
         return PipelineResult(recipe, series, scores, {}, {"query_embedding": False, "recipe": True},
-                              cached["fallback_used"], cached["suggestions"], cached["candidates"], cached["mode"])
+                              cached["fallback_used"], cached["suggestions"], cached["candidates"], cached["mode"],
+                              [GeneratedRecipe(**a) for a in cached.get("alternatives", [])])

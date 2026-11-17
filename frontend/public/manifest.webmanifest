@@ -1,0 +1,10 @@
+{
+  "name": "Snap2Cook",
+  "short_name": "Snap2Cook",
+  "description": "Photo of your ingredients in, a recipe that fits your kitchen out.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff8f1",
+  "theme_color": "#f96a12",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
