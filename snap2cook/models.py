@@ -1,7 +1,7 @@
 """Pydantic domain models shared across the app."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Literal
 
 import pandas as pd
@@ -134,6 +134,7 @@ class PipelineResult:
     suggestions: list[str]
     candidates: list[dict[str, Any]]
     mode: str
+    alternatives: list[GeneratedRecipe] = field(default_factory=list)
 
     def to_cache(self) -> dict[str, Any]:
         """JSON-safe form stored in the recipe cache."""
@@ -144,4 +145,5 @@ class PipelineResult:
             "suggestions": self.suggestions,
             "candidates": self.candidates,
             "mode": self.mode,
+            "alternatives": [a.model_dump() for a in self.alternatives],
         }
