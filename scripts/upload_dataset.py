@@ -12,8 +12,8 @@ from dotenv import dotenv_values
 from huggingface_hub import HfApi
 from huggingface_hub.errors import HfHubHTTPError
 
-from snap2cook.config import ROOT, Settings
-from snap2cook.rag.store import FILES
+from forklens.config import ROOT, Settings
+from forklens.rag.store import FILES
 
 
 def main() -> int:

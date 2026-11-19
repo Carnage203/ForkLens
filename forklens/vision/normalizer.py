@@ -5,8 +5,8 @@ import re
 from pathlib import Path
 from typing import Iterable
 
-from snap2cook.fileio.safe_io import SafeFile
-from snap2cook.models import DetectedIngredient
+from forklens.fileio.safe_io import SafeFile
+from forklens.models import DetectedIngredient
 
 
 class IngredientNormalizer:

@@ -16,7 +16,7 @@ export default function Shared() {
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       <RecipeView recipe={data.recipe} tier={data.tier} readOnly />
-      <div className="card text-center"><p className="font-semibold">Got ingredients but no idea what to cook?</p><Link to="/" className="btn-primary mt-3">Try Snap2Cook</Link></div>
+      <div className="card text-center"><p className="font-semibold">Got ingredients but no idea what to cook?</p><Link to="/" className="btn-primary mt-3">Try ForkLens</Link></div>
     </div>
   )
 }

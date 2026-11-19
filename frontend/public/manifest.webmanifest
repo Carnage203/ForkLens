@@ -1,6 +1,6 @@
 {
-  "name": "Snap2Cook",
-  "short_name": "Snap2Cook",
+  "name": "ForkLens",
+  "short_name": "ForkLens",
   "description": "Photo of your ingredients in, a recipe that fits your kitchen out.",
   "start_url": "/",
   "display": "standalone",

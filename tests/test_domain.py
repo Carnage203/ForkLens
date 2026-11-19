@@ -6,20 +6,20 @@ import io
 import pytest
 from PIL import Image
 
-from snap2cook.analytics.series import ingredient_series, score_series
-from snap2cook.cache import FileCache, LRUCache, TieredCache
-from snap2cook.exceptions import (
-    FileOperationError, InvalidImageError, RateLimitExceededError, Snap2CookError, UnsupportedTierError)
-from snap2cook.limiter import RateLimiter
-from snap2cook.models import HOSTEL_TECHNIQUES, Conditions, DetectedIngredient
-from snap2cook.tiers import TierFactory
-from snap2cook.vision.image_utils import MAX_SIDE, ImageValidator
-from snap2cook.vision.normalizer import IngredientNormalizer
+from forklens.analytics.series import ingredient_series, score_series
+from forklens.cache import FileCache, LRUCache, TieredCache
+from forklens.exceptions import (
+    FileOperationError, InvalidImageError, RateLimitExceededError, ForkLensError, UnsupportedTierError)
+from forklens.limiter import RateLimiter
+from forklens.models import HOSTEL_TECHNIQUES, Conditions, DetectedIngredient
+from forklens.tiers import TierFactory
+from forklens.vision.image_utils import MAX_SIDE, ImageValidator
+from forklens.vision.normalizer import IngredientNormalizer
 
 
 def test_q9_hierarchy_and_user_message() -> None:
     err = FileOperationError("boom", "x.txt", "read")
-    assert isinstance(err, Snap2CookError) and err.context["op"] == "read" and err.user_message
+    assert isinstance(err, ForkLensError) and err.context["op"] == "read" and err.user_message
 
 
 def test_q9_rate_limit_error_carries_retry_after() -> None:
@@ -139,8 +139,8 @@ def test_image_validator_rejects_bad_input(raw: bytes) -> None:
 
 
 def test_model_fallback_moves_to_next_model_and_dedupes() -> None:
-    from snap2cook.exceptions import GenerationError
-    from snap2cook.gemini import call_with_model_fallback, model_chain
+    from forklens.exceptions import GenerationError
+    from forklens.gemini import call_with_model_fallback, model_chain
 
     assert model_chain("a", ("b", "a", "c")) == ("a", "b", "c")
     tried: list[str] = []

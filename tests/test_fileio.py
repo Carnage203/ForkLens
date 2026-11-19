@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from snap2cook.exceptions import FileOperationError
-from snap2cook.fileio.safe_io import SafeFile
-from snap2cook.fileio.text_tools import FileTextProcessor
+from forklens.exceptions import FileOperationError
+from forklens.fileio.safe_io import SafeFile
+from forklens.fileio.text_tools import FileTextProcessor
 
 
 def test_q6_sample_word_order_matches_syllabus() -> None:

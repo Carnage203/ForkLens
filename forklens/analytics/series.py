@@ -6,7 +6,7 @@ from typing import Iterable
 
 import pandas as pd
 
-from snap2cook.models import DetectedIngredient
+from forklens.models import DetectedIngredient
 
 
 def ingredient_series(items: Iterable[DetectedIngredient]) -> pd.Series:

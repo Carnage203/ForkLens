@@ -10,14 +10,14 @@ from google import genai
 from google.genai import types
 from pydantic import ValidationError
 
-from snap2cook.exceptions import GenerationError
-from snap2cook.gemini import call_with_model_fallback
-from snap2cook.llm import GroqClient, is_groq
-from snap2cook.models import Conditions, GeneratedRecipe, Recipe
-from snap2cook.rag.reranker import ScoredRecipe
-from snap2cook.tiers import Tier
+from forklens.exceptions import GenerationError
+from forklens.gemini import call_with_model_fallback
+from forklens.llm import GroqClient, is_groq
+from forklens.models import Conditions, GeneratedRecipe, Recipe
+from forklens.rag.reranker import ScoredRecipe
+from forklens.tiers import Tier
 
-log = logging.getLogger("snap2cook.generator")
+log = logging.getLogger("forklens.generator")
 JSON_EXAMPLE = json.dumps({
     "title": "Recipe name", "time_min": 15, "ingredients_used": ["egg"], "extra_needed": [],
     "techniques_used": ["mix"], "steps": ["First step.", "Second step."],

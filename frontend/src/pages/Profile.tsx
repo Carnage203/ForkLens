@@ -24,7 +24,7 @@ export default function Profile() {
   return (
     <div className="space-y-6">
       <div><h1 className="text-3xl font-bold">{me?.kind === 'user' ? `Hi${me.name ? ', ' + me.name.split(' ')[0] : ''}!` : 'Your kitchen stats'}</h1>
-        <p className="text-muted">{me?.kind === 'user' ? me.email : 'You are using Snap2Cook as a guest. Sign in to sync your cookbook across devices.'}</p></div>
+        <p className="text-muted">{me?.kind === 'user' ? me.email : 'You are using ForkLens as a guest. Sign in to sync your cookbook across devices.'}</p></div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat label="Cook points" value={stats?.points ?? 0} icon={<Award size={16} />} hint="10 per meal cooked" />
         <Stat label="Day streak" value={stats?.streak ?? 0} icon={<Flame size={16} />} hint="Cook on consecutive days" />

@@ -1,4 +1,4 @@
-# CLAUDE.md — Snap2Cook
+# CLAUDE.md — ForkLens
 
 > Photo of ingredients → cooking recipe that fits the cook's kitchen (Home / PG / Hostel).
 > Gemini vision → ingredient list → cloud RAG (cloud-stored synthetic recipe corpus + cloud embeddings, filter → similarity → rerank → cache) → grounded recipe.
@@ -71,7 +71,7 @@ Fallback chain: generation fails / invalid JSON twice → show the top reranked 
 
 Each kept item lives in its own named module, tagged `# SYLLABUS Q<n>` at the top, is used by the real app, has a `__main__` demo, and is printed by `python -m assignments.run_all` (for the viva).
 
-| Q | Task | Module | Real use in Snap2Cook |
+| Q | Task | Module | Real use in ForkLens |
 |---|---|---|---|
 | 6 | Read file; (i) each word reversed (ii) each line reversed — sample `Python Programming` → `Programming Python` (iii) content without whitespace | `fileio/text_tools.py` → `FileTextProcessor` | "Text Tools" expander on the exported recipe / uploaded `.txt`. **Wording is ambiguous — implement all:** `reverse_each_word()` (letters per word), `reverse_word_order_per_line()` (matches the sample), `reverse_line_order()`, `strip_whitespace()`. |
 | 8 | Handle run-time errors in file handling | `fileio/safe_io.py` → `SafeFile` | ALL disk access (local corpus fallback, cache files, logs, exports) goes through it. Handles `FileNotFoundError, PermissionError, IsADirectoryError, UnicodeDecodeError, json.JSONDecodeError, OSError`; atomic write (temp file + `os.replace`); re-raises as our `FileOperationError` with path/op context. |
@@ -79,7 +79,7 @@ Each kept item lives in its own named module, tagged `# SYLLABUS Q<n>` at the to
 | 10 | Pandas Series with labels | `analytics/series.py` + vision/retriever | Ingredient confidences = `pd.Series(conf, index=names, name="confidence")`; retrieval scores = `pd.Series(scores, index=recipe_ids, name="score")`. Shown in UI as tables. `__main__` demo shows `.loc`, label slicing, `.sort_values`, boolean masks. |
 
 ```
-Snap2CookError(Exception)               # base: message + user_message + context dict
+ForkLensError(Exception)               # base: message + user_message + context dict
 ├─ FileOperationError                   # path, op
 ├─ InvalidImageError                    # bad type / too big / corrupt
 ├─ NoIngredientsDetectedError
@@ -200,11 +200,11 @@ Clean, minimal, mobile-first (students use phones). One accent colour. Friendly 
 ## 13. Repo layout
 
 ```
-snap2cook/
+forklens/
 ├─ CLAUDE.md  README.md  requirements.txt  requirements-dev.txt  .env.example  .gitignore
 ├─ .streamlit/config.toml            # theme only; secrets.toml is gitignored
 ├─ app.py                            # UI only
-├─ snap2cook/
+├─ forklens/
 │  ├─ config.py  exceptions.py  models.py  tiers.py  cache.py  limiter.py  pipeline.py  logging_setup.py
 │  ├─ fileio/      safe_io.py  text_tools.py                  # Q8, Q6
 │  ├─ analytics/   series.py                                  # Q10

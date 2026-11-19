@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from snap2cook.models import DetectedIngredient
+from forklens.models import DetectedIngredient
 
 
 class VisionProvider(ABC):

@@ -50,7 +50,7 @@ class Settings:
     embed_dim: int = 768
     hf_dataset_repo: str = ""
     data_dir: Path = ROOT / "data"
-    cache_dir: Path = Path(tempfile.gettempdir()) / "snap2cook_cache"
+    cache_dir: Path = Path(tempfile.gettempdir()) / "forklens_cache"
     log_dir: Path = ROOT / "logs"
     w_similarity: float = 0.6
     w_coverage: float = 0.4

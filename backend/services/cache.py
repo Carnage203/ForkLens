@@ -11,9 +11,9 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from backend.db.models import CacheEntry
 from backend.db.session import Database
-from snap2cook.cache import Cache
+from forklens.cache import Cache
 
-log = logging.getLogger("snap2cook.dbcache")
+log = logging.getLogger("forklens.dbcache")
 DEFAULT_TTL_S = 7 * 24 * 3600
 
 

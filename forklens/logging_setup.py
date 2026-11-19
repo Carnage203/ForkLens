@@ -6,9 +6,9 @@ import logging
 import uuid
 from logging.handlers import RotatingFileHandler
 
-from snap2cook.config import Settings
-from snap2cook.exceptions import FileOperationError
-from snap2cook.fileio.safe_io import SafeFile
+from forklens.config import Settings
+from forklens.exceptions import FileOperationError
+from forklens.fileio.safe_io import SafeFile
 
 _request_id: contextvars.ContextVar[str] = contextvars.ContextVar("request_id", default="-")
 
@@ -27,8 +27,8 @@ class _RequestIdFilter(logging.Filter):
 
 
 def setup_logging(settings: Settings) -> logging.Logger:
-    """Configure the ``snap2cook`` logger once and return it."""
-    logger = logging.getLogger("snap2cook")
+    """Configure the ``forklens`` logger once and return it."""
+    logger = logging.getLogger("forklens")
     if logger.handlers:
         return logger
     logger.setLevel(logging.INFO)
@@ -36,7 +36,7 @@ def setup_logging(settings: Settings) -> logging.Logger:
     handlers: list[logging.Handler] = [logging.StreamHandler()]
     try:
         SafeFile.ensure_dir(settings.log_dir)
-        handlers.append(RotatingFileHandler(settings.log_dir / "snap2cook.log", maxBytes=500_000, backupCount=2, encoding="utf-8"))
+        handlers.append(RotatingFileHandler(settings.log_dir / "forklens.log", maxBytes=500_000, backupCount=2, encoding="utf-8"))
     except (FileOperationError, OSError):
         pass  # console logging is enough if the disk is read-only
     for handler in handlers:

@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import hashlib
 
-from snap2cook.models import DetectedIngredient
-from snap2cook.vision.base import VisionProvider
+from forklens.models import DetectedIngredient
+from forklens.vision.base import VisionProvider
 
 _PRESETS: tuple[tuple[tuple[str, float], ...], ...] = (
     (("oats", 0.93), ("banana", 0.9), ("peanut butter", 0.8)),

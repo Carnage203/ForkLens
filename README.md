@@ -1,4 +1,4 @@
-# Snap2Cook
+# ForkLens
 
 Photo of the food you have in, a recipe that fits your kitchen out. Built for students: **Hostel** (kettle only), **PG** (one appliance) or **Home** (full kitchen).
 
@@ -35,7 +35,7 @@ The admin console lives at the secret path in `VITE_ADMIN_PATH`; it is not linke
 
 ## Layout
 
-`frontend/` React app, `backend/` FastAPI app, `snap2cook/` framework-free domain core (tiers, RAG pipeline, vision, caches, exceptions, file I/O), `data/` recipe corpus, `api/index.py` Vercel entrypoint, `scripts/` DB init, demo seed, corpus tools, `tests/`.
+`frontend/` React app, `backend/` FastAPI app, `forklens/` framework-free domain core (tiers, RAG pipeline, vision, caches, exceptions, file I/O), `data/` recipe corpus, `api/index.py` Vercel entrypoint, `scripts/` DB init, demo seed, corpus tools, `tests/`.
 
 ## Limitations
 

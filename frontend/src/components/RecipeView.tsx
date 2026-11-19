@@ -10,7 +10,7 @@ export function recipeText(r: Recipe): string {
   return [r.title.toUpperCase(), `Time: ${r.time_min} minutes`, '', 'You will use: ' + r.ingredients_used.join(', '),
     ...(r.extra_needed.length ? ['You also need: ' + r.extra_needed.join(', ')] : []), '', 'Steps:',
     ...r.steps.map((s, i) => `${i + 1}. ${s}`), ...(r.substitutions.length ? ['', 'Tips:', ...r.substitutions.map(s => '- ' + s)] : []),
-    '', 'Safety: ' + r.safety_note, '', 'Made with Snap2Cook'].join('\n')
+    '', 'Safety: ' + r.safety_note, '', 'Made with ForkLens'].join('\n')
 }
 
 interface Props { recipe: Recipe; tier: TierId; runId?: string; saved?: Saved | null; onSaved?: (s: Saved | null) => void; readOnly?: boolean }

@@ -12,10 +12,10 @@ from sqlalchemy.orm import Session
 from backend.db.models import Event, utcnow
 from backend.deps import ClientMeta, get_hub
 from backend.services.hub import ServiceHub
-from snap2cook.exceptions import RateLimitExceededError
+from forklens.exceptions import RateLimitExceededError
 
 COOKIE = "s2c_admin"
-AUDIENCE = "snap2cook-admin"
+AUDIENCE = "forklens-admin"
 SESSION_HOURS = 8
 MAX_FAILURES = 5
 LOCKOUT = timedelta(minutes=15)

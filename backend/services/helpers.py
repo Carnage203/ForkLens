@@ -7,7 +7,7 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from backend.db.models import Event
-from snap2cook.models import GeneratedRecipe, Recipe
+from forklens.models import GeneratedRecipe, Recipe
 
 
 def new_id() -> str:

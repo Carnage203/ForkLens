@@ -7,13 +7,13 @@ import numpy as np
 import pytest
 import requests
 
-from snap2cook.config import Settings
-from snap2cook.exceptions import CorpusLoadError, GenerationError, NoIngredientsDetectedError, RateLimitExceededError
-from snap2cook.limiter import RateLimiter
-from snap2cook.models import Conditions, GeneratedRecipe
-from snap2cook.rag.generator import GenerationContext, Generator, validate_grounded
-from snap2cook.rag.store import CorpusStore, HFDatasetStore, LocalStore, load_with_fallback
-from snap2cook.vision.image_utils import ImageValidator
+from forklens.config import Settings
+from forklens.exceptions import CorpusLoadError, GenerationError, NoIngredientsDetectedError, RateLimitExceededError
+from forklens.limiter import RateLimiter
+from forklens.models import Conditions, GeneratedRecipe
+from forklens.rag.generator import GenerationContext, Generator, validate_grounded
+from forklens.rag.store import CorpusStore, HFDatasetStore, LocalStore, load_with_fallback
+from forklens.vision.image_utils import ImageValidator
 from tests.conftest import CountingGenerator
 
 
@@ -73,7 +73,7 @@ def test_cloud_failure_falls_back_to_local(settings) -> None:
         def get(self, *args, **kwargs):
             raise requests.ConnectionError("offline")
 
-    cloud_settings = Settings(hf_dataset_repo="someone/snap2cook")
+    cloud_settings = Settings(hf_dataset_repo="someone/forklens")
     cloud = HFDatasetStore(cloud_settings, session=Down(), retries=1, sleep=lambda _: None)
     corpus = load_with_fallback(cloud, LocalStore(settings))
     assert corpus.source == "local" and len(corpus) == 90

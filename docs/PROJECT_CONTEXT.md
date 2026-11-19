@@ -1,4 +1,4 @@
-# Snap2Cook: project context (for planning the presentation)
+# ForkLens: project context (for planning the presentation)
 
 Give this file to an AI assistant and ask it to plan the slides. Facts below describe the **deployed** app. Items marked
 **[fill in]** are for the author to complete. Nothing here contains secrets.
@@ -10,10 +10,10 @@ Snap a photo (up to 3) of the food you have, and get one beginner-friendly recip
 ## 2. Context
 
 - **Course:** Advanced Python Programming, MTech Data Science. Marking looks at OOP, file handling, exception handling and pandas, plus a working deployed app.
-- **Author:** Satyaki (GitHub: Carnage203). Repo: https://github.com/Carnage203/Snap2Cook
-- **Live app:** Streamlit Community Cloud, URL **[fill in]**. Corpus dataset: https://huggingface.co/datasets/sohammandal1/snap2cook-corpus
+- **Author:** Satyaki (GitHub: Carnage203). Repo: https://github.com/Carnage203/ForkLens
+- **Live app:** Streamlit Community Cloud, URL **[fill in]**. Corpus dataset: https://huggingface.co/datasets/sohammandal1/forklens-corpus
 - **Target user:** a college fresher or bachelor who cannot cook and has a few random items.
-- **Core idea:** most recipe apps assume a full kitchen. Snap2Cook treats the *kitchen* as a first-class input, so a hostel student with only a kettle gets only kettle-safe recipes, and is told honestly when nothing sensible can be made.
+- **Core idea:** most recipe apps assume a full kitchen. ForkLens treats the *kitchen* as a first-class input, so a hostel student with only a kettle gets only kettle-safe recipes, and is told honestly when nothing sensible can be made.
 
 ## 3. What the user sees
 
@@ -80,12 +80,12 @@ Hugging Face dataset -> CorpusStore (Cloud -> Local fallback)     v
 
 | Q | Module | Real use in app |
 |---|---|---|
-| Q6 text file operations (word reversal, line reversal, strip whitespace) | `snap2cook/fileio/text_tools.py` (`FileTextProcessor`) | **Not visible in the UI any more** (Text Tools tab removed). Demonstrated via `python -m assignments.run_all` |
-| Q8 file-handling errors | `snap2cook/fileio/safe_io.py` (`SafeFile`) | All disk access (corpus fallback, cache files, logs). Handles missing file, permission, directory, bad encoding, bad JSON; atomic write via temp file + `os.replace`; re-raises as `FileOperationError` |
-| Q9 user-defined exceptions | `snap2cook/exceptions.py` | 11-class hierarchy under `Snap2CookError`, each with a technical message and a friendly `user_message`; raised in pipeline/vision/storage/IO and caught only at the UI boundary |
-| Q10 labelled pandas Series | `snap2cook/analytics/series.py` | Ingredient confidences and retrieval scores are labelled Series; multi-photo results are merged with a groupby-max |
+| Q6 text file operations (word reversal, line reversal, strip whitespace) | `forklens/fileio/text_tools.py` (`FileTextProcessor`) | **Not visible in the UI any more** (Text Tools tab removed). Demonstrated via `python -m assignments.run_all` |
+| Q8 file-handling errors | `forklens/fileio/safe_io.py` (`SafeFile`) | All disk access (corpus fallback, cache files, logs). Handles missing file, permission, directory, bad encoding, bad JSON; atomic write via temp file + `os.replace`; re-raises as `FileOperationError` |
+| Q9 user-defined exceptions | `forklens/exceptions.py` | 11-class hierarchy under `ForkLensError`, each with a technical message and a friendly `user_message`; raised in pipeline/vision/storage/IO and caught only at the UI boundary |
+| Q10 labelled pandas Series | `forklens/analytics/series.py` | Ingredient confidences and retrieval scores are labelled Series; multi-photo results are merged with a groupby-max |
 
-Exception tree: `Snap2CookError` -> `FileOperationError`, `InvalidImageError`, `NoIngredientsDetectedError`, `VisionProviderError`, `EmbeddingError`, `CorpusLoadError`, `RetrievalError`, `GenerationError`, `UnsupportedTierError`, `RateLimitExceededError`.
+Exception tree: `ForkLensError` -> `FileOperationError`, `InvalidImageError`, `NoIngredientsDetectedError`, `VisionProviderError`, `EmbeddingError`, `CorpusLoadError`, `RetrievalError`, `GenerationError`, `UnsupportedTierError`, `RateLimitExceededError`.
 
 ## 9. Data
 
@@ -109,7 +109,7 @@ Exception tree: `Snap2CookError` -> `FileOperationError`, `InvalidImageError`, `
 | Metric | Value |
 |---|---|
 | Automated tests | 45 passing, about 0.3 s, no network |
-| Corpus | 90 recipes; loaded from the cloud dataset (log line: `Corpus loaded from cloud:hf:sohammandal1/snap2cook-corpus (90 recipes)`) |
+| Corpus | 90 recipes; loaded from the cloud dataset (log line: `Corpus loaded from cloud:hf:sohammandal1/forklens-corpus (90 recipes)`) |
 | Cold recipe request (live Gemini, hostel oats + banana) | about 6 to 14 s across runs |
 | Repeat identical request | about 1 ms (served from cache, no API call) |
 | Cache hit rate on a repeat run | 33% over the two-request test (1 hit of 3 lookups); higher with more repeats |
@@ -144,7 +144,7 @@ Exception tree: `Snap2CookError` -> `FileOperationError`, `InvalidImageError`, `
 4. Switch to Hostel with an egg photo -> show the honest "can't make this" and suggestions.
 5. Switch to Home with a stove and extras -> richer recipe.
 6. Repeat a request -> instant response, explain the cache.
-7. Show `snap2cook/tiers.py` (Strategy + Factory) and `pipeline.py` (dependency injection).
+7. Show `forklens/tiers.py` (Strategy + Factory) and `pipeline.py` (dependency injection).
 8. Run `python -m assignments.run_all` -> Q6, Q8, Q9, Q10 demos.
 9. Run `pytest -q` -> 45 passed.
 10. Explain the fallback chain, using the real 503 example.
@@ -153,7 +153,7 @@ Exception tree: `Snap2CookError` -> `FileOperationError`, `InvalidImageError`, `
 
 ```
 app.py                      UI only
-snap2cook/                  config, exceptions, tiers, pipeline, bootstrap, gemini (retry + model fallback), cache, limiter, logging_setup, models
+forklens/                  config, exceptions, tiers, pipeline, bootstrap, gemini (retry + model fallback), cache, limiter, logging_setup, models
   fileio/ (Q8, Q6)  analytics/ (Q10)  vision/  rag/
 data/                       recipes.jsonl, embeddings.npy, meta.json, synonyms.json, pantry.json
 scripts/                    build_embeddings.py, upload_dataset.py

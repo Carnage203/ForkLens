@@ -12,7 +12,7 @@ from datetime import timedelta
 
 from backend.db.models import Event, Feedback, Owner, RecipeRun, RequestLog, day_of, utcnow
 from backend.db.session import Database
-from snap2cook.config import Settings
+from forklens.config import Settings
 
 INGREDIENTS = ["egg", "bread", "rice", "oats", "banana", "potato", "onion", "tomato", "paneer", "milk", "noodles", "curd"]
 TITLES = ["Kettle Masala Oats", "Egg Bhurji Toast", "Tomato Rice", "Banana Oat Bowl", "Curd Rice", "Paneer Wrap"]

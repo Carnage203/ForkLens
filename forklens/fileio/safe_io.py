@@ -9,7 +9,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
 
-from snap2cook.exceptions import FileOperationError
+from forklens.exceptions import FileOperationError
 
 
 class SafeFile:

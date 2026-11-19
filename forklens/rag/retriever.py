@@ -8,16 +8,16 @@ from dataclasses import dataclass, field
 import numpy as np
 import pandas as pd
 
-from snap2cook.analytics.series import score_series
-from snap2cook.cache import Cache
-from snap2cook.exceptions import EmbeddingError, RetrievalError
-from snap2cook.models import Conditions
-from snap2cook.rag.corpus import Corpus
-from snap2cook.rag.embedder import Embedder, LexicalEmbedder
-from snap2cook.rag.reranker import Reranker, ScoredRecipe
-from snap2cook.tiers import Tier
+from forklens.analytics.series import score_series
+from forklens.cache import Cache
+from forklens.exceptions import EmbeddingError, RetrievalError
+from forklens.models import Conditions
+from forklens.rag.corpus import Corpus
+from forklens.rag.embedder import Embedder, LexicalEmbedder
+from forklens.rag.reranker import Reranker, ScoredRecipe
+from forklens.tiers import Tier
 
-log = logging.getLogger("snap2cook.retriever")
+log = logging.getLogger("forklens.retriever")
 
 
 @dataclass

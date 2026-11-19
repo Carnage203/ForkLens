@@ -14,8 +14,8 @@ from backend.main import create_app
 from backend.services.cache import DbCache
 from backend.services.limiter import DbRateLimiter
 from backend.services.supabase_auth import AuthUser
-from snap2cook.config import Settings
-from snap2cook.exceptions import RateLimitExceededError
+from forklens.config import Settings
+from forklens.exceptions import RateLimitExceededError
 
 GUEST = {"X-Client-Id": "guest-client-0001-abcdef"}
 ADMIN = {"username": "boss", "password": "correct-horse-battery"}

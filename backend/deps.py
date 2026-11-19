@@ -58,7 +58,7 @@ def get_meta(request: Request, hub: ServiceHub = Depends(get_hub)) -> ClientMeta
     """Hash the caller's IP with a server-side salt; keep country (Vercel header) and a trimmed user agent."""
     forwarded = request.headers.get("x-forwarded-for", "")
     ip = forwarded.split(",")[0].strip() or (request.client.host if request.client else "unknown")
-    salt = hub.settings.admin_jwt_secret or "snap2cook"
+    salt = hub.settings.admin_jwt_secret or "forklens"
     return ClientMeta(hashlib.sha256(f"{salt}:{ip}".encode()).hexdigest()[:16],
                       request.headers.get("x-vercel-ip-country"), request.headers.get("user-agent", "")[:200])
 

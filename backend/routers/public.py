@@ -11,11 +11,11 @@ from backend.schemas import GenerateIn
 from backend.services.helpers import new_id, recipe_payload, record_event
 from backend.services.hub import Services
 from backend.db.models import RecipeRun
-from snap2cook.exceptions import InvalidImageError
-from snap2cook.gemini import served_models
-from snap2cook.models import Conditions
-from snap2cook.tiers import TierFactory
-from snap2cook.vision.image_utils import ImageValidator
+from forklens.exceptions import InvalidImageError
+from forklens.gemini import served_models
+from forklens.models import Conditions
+from forklens.tiers import TierFactory
+from forklens.vision.image_utils import ImageValidator
 
 router = APIRouter(prefix="/api")
 VERSION = "2.0.0"

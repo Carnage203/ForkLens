@@ -13,13 +13,13 @@ import numpy as np
 import requests
 from pydantic import ValidationError
 
-from snap2cook.config import Settings
-from snap2cook.exceptions import CorpusLoadError, FileOperationError
-from snap2cook.fileio.safe_io import SafeFile
-from snap2cook.models import Recipe
-from snap2cook.rag.corpus import Corpus
+from forklens.config import Settings
+from forklens.exceptions import CorpusLoadError, FileOperationError
+from forklens.fileio.safe_io import SafeFile
+from forklens.models import Recipe
+from forklens.rag.corpus import Corpus
 
-log = logging.getLogger("snap2cook.store")
+log = logging.getLogger("forklens.store")
 FILES = ("recipes.jsonl", "embeddings.npy", "meta.json")
 
 

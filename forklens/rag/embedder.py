@@ -9,8 +9,8 @@ import numpy as np
 from google import genai
 from google.genai import types
 
-from snap2cook.exceptions import EmbeddingError
-from snap2cook.gemini import call_with_retries
+from forklens.exceptions import EmbeddingError
+from forklens.gemini import call_with_retries
 
 
 def l2_normalize(matrix: np.ndarray) -> np.ndarray:

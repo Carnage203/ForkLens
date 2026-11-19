@@ -11,20 +11,20 @@ from typing import Iterable, Sequence
 
 import pandas as pd
 
-from snap2cook.analytics.series import ingredient_series, merge_ingredient_series, score_series
-from snap2cook.cache import Cache
-from snap2cook.config import Settings
-from snap2cook.exceptions import GenerationError, NoIngredientsDetectedError
-from snap2cook.limiter import RateLimiter
-from snap2cook.models import Conditions, GeneratedRecipe, PipelineResult
-from snap2cook.rag.generator import GenerationContext, Generator, VerbatimGenerator, recipe_to_generated
-from snap2cook.rag.retriever import Retriever
-from snap2cook.tiers import Tier
-from snap2cook.vision.base import VisionProvider
-from snap2cook.vision.image_utils import PreparedImage
-from snap2cook.vision.normalizer import IngredientNormalizer
+from forklens.analytics.series import ingredient_series, merge_ingredient_series, score_series
+from forklens.cache import Cache
+from forklens.config import Settings
+from forklens.exceptions import GenerationError, NoIngredientsDetectedError
+from forklens.limiter import RateLimiter
+from forklens.models import Conditions, GeneratedRecipe, PipelineResult
+from forklens.rag.generator import GenerationContext, Generator, VerbatimGenerator, recipe_to_generated
+from forklens.rag.retriever import Retriever
+from forklens.tiers import Tier
+from forklens.vision.base import VisionProvider
+from forklens.vision.image_utils import PreparedImage
+from forklens.vision.normalizer import IngredientNormalizer
 
-log = logging.getLogger("snap2cook.pipeline")
+log = logging.getLogger("forklens.pipeline")
 
 
 class Pipeline:

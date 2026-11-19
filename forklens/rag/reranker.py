@@ -4,8 +4,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from snap2cook.config import Settings
-from snap2cook.models import Recipe
+from forklens.config import Settings
+from forklens.models import Recipe
 
 
 @dataclass(frozen=True)

@@ -1,7 +1,7 @@
 # SYLLABUS Q9 - user-defined exceptions
-"""Custom exception hierarchy for Snap2Cook.
+"""Custom exception hierarchy for ForkLens.
 
-Every domain failure derives from :class:`Snap2CookError`, which carries a
+Every domain failure derives from :class:`ForkLensError`, which carries a
 technical ``message`` (for logs), a friendly ``user_message`` (for the UI) and a
 ``context`` dict. The UI catches the base class once and shows ``user_message``.
 """
@@ -10,7 +10,7 @@ from __future__ import annotations
 from typing import Any
 
 
-class Snap2CookError(Exception):
+class ForkLensError(Exception):
     """Base class of all application errors."""
 
     default_user_message = "Something went wrong. Please try again."
@@ -28,7 +28,7 @@ class Snap2CookError(Exception):
         return f"{self.message} [{details}]"
 
 
-class FileOperationError(Snap2CookError):
+class FileOperationError(ForkLensError):
     """A disk operation failed; ``path`` and ``op`` are kept in the context."""
 
     default_user_message = "We could not read or write a file."
@@ -39,55 +39,55 @@ class FileOperationError(Snap2CookError):
         self.op = op
 
 
-class InvalidImageError(Snap2CookError):
+class InvalidImageError(ForkLensError):
     """The uploaded image is the wrong type, too large or corrupt."""
 
     default_user_message = "That image could not be used. Please upload a JPEG, PNG or WEBP under 5 MB."
 
 
-class NoIngredientsDetectedError(Snap2CookError):
+class NoIngredientsDetectedError(ForkLensError):
     """Vision found nothing edible in the photo."""
 
     default_user_message = "We could not spot any ingredients. Try a clearer photo or add them manually."
 
 
-class VisionProviderError(Snap2CookError):
+class VisionProviderError(ForkLensError):
     """The vision API failed (down, auth, quota, timeout or bad JSON)."""
 
     default_user_message = "Photo analysis is unavailable right now. Please add your ingredients manually."
 
 
-class EmbeddingError(Snap2CookError):
+class EmbeddingError(ForkLensError):
     """The embedding API failed."""
 
     default_user_message = "Smart search is unavailable, using simpler matching instead."
 
 
-class CorpusLoadError(Snap2CookError):
+class CorpusLoadError(ForkLensError):
     """The recipe corpus could not be fetched or failed validation."""
 
     default_user_message = "The recipe library could not be loaded."
 
 
-class RetrievalError(Snap2CookError):
+class RetrievalError(ForkLensError):
     """Recipe retrieval failed."""
 
     default_user_message = "We could not search the recipe library."
 
 
-class GenerationError(Snap2CookError):
+class GenerationError(ForkLensError):
     """Recipe generation failed or produced an ungrounded recipe."""
 
     default_user_message = "We could not write a recipe this time."
 
 
-class UnsupportedTierError(Snap2CookError):
+class UnsupportedTierError(ForkLensError):
     """Unknown kitchen tier or an invalid equipment choice for a tier."""
 
     default_user_message = "That kitchen type or equipment choice is not supported."
 
 
-class RateLimitExceededError(Snap2CookError):
+class RateLimitExceededError(ForkLensError):
     """Too many generations; ``retry_after`` is the wait in seconds."""
 
     def __init__(self, message: str, retry_after: int) -> None:
@@ -102,7 +102,7 @@ class RateLimitExceededError(Snap2CookError):
 
 def demo() -> None:
     """Raise and catch each exception type (viva demo)."""
-    samples: list[Snap2CookError] = [
+    samples: list[ForkLensError] = [
         FileOperationError("cannot open", "missing.txt", "read"),
         InvalidImageError("bad bytes"),
         NoIngredientsDetectedError("empty list"),
@@ -117,7 +117,7 @@ def demo() -> None:
     for err in samples:
         try:
             raise err
-        except Snap2CookError as caught:
+        except ForkLensError as caught:
             print(f"{type(caught).__name__:28} -> {caught.user_message}")
 
 
