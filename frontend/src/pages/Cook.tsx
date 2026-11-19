@@ -6,7 +6,8 @@ import { useStore } from '../store'
 import type { Detected, GenerateResponse, PantryItem, Recipe, Saved, ScanResponse } from '../types'
 import KitchenSettings from '../components/KitchenSettings'
 import RecipeView from '../components/RecipeView'
-import { Chip, IngredientInput, Skeleton, Spinner, cn } from '../components/ui'
+import DetectedIngredients from '../components/DetectedIngredients'
+import { IngredientInput, Skeleton, Spinner, cn } from '../components/ui'
 
 const COOKING_LINES = ['Checking your kitchen rules...', 'Searching the recipe library...', 'Picking the easiest option...', 'Writing the steps...']
 
@@ -104,20 +105,14 @@ export default function Cook() {
         </div>
         {previews.length > 0 && (
           <div className="flex gap-2 overflow-x-auto pb-1">
-            {previews.map((p, i) => <img key={p + i} src={p} alt={`Photo ${i + 1}`} className="h-20 w-20 shrink-0 rounded-2xl object-cover" />)}
-            <button className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl border border-dashed border-line text-muted" onClick={() => setPreviews([])} aria-label="Clear photos"><X size={18} /></button>
+            {previews.map((p, i) => <img key={p + i} src={p} alt={`Photo ${i + 1}`} className="h-14 w-14 shrink-0 rounded-xl object-cover" />)}
+            <button className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-dashed border-line text-muted" onClick={() => setPreviews([])} aria-label="Clear photos"><X size={18} /></button>
           </div>
         )}
         {scanning && <div className="space-y-2" aria-live="polite"><p className="flex items-center gap-2 text-sm font-semibold text-brand-600"><Spinner />Looking at your food...</p><Skeleton className="h-10" /></div>}
+        <DetectedIngredients items={items} onChange={setItems} />
+        {items.length === 0 && !scanning && <p className="text-sm text-muted">No ingredients yet. Take a photo or type them in.</p>}
         <IngredientInput vocabulary={config?.vocabulary ?? []} onAdd={name => setItems(prev => merge(prev, [{ name, confidence: 1 }]))} />
-        <div className="flex flex-wrap items-center gap-2">
-          {items.map(i => (
-            <Chip key={i.name} tone={i.confidence < 0.6 ? 'plain' : 'brand'} onRemove={() => setItems(prev => prev.filter(x => x.name !== i.name))}>
-              {i.name}{i.confidence < 0.6 && <span title="Not sure about this one" className="text-amber-600">?</span>}
-            </Chip>
-          ))}
-          {items.length === 0 && !scanning && <p className="text-sm text-muted">No ingredients yet. Take a photo or type them in.</p>}
-        </div>
         <div className="flex flex-wrap gap-2">
           <button className="btn-ghost" onClick={addPantry}><Refrigerator size={16} />Add my pantry</button>
           {items.length > 0 && <button className="btn-ghost" onClick={() => { setItems([]); setPreviews([]); setResult(null) }}>Clear all</button>}
