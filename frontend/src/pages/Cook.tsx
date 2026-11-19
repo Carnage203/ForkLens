@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Camera, ImagePlus, Refrigerator, Sparkles, X, ChefHat, Info, Lightbulb } from 'lucide-react'
+import { Camera, ImagePlus, Refrigerator, Sparkles, X, ChefHat, Info } from 'lucide-react'
 import { ApiError, api, compressImage } from '../api'
 import { useStore } from '../store'
 import type { Detected, GenerateResponse, PantryItem, Recipe, Saved, ScanResponse } from '../types'
@@ -156,16 +156,6 @@ export default function Cook() {
               </div>
             )}
             <RecipeView key={current.title} recipe={current} tier={prefs.tier} runId={result.run_id} saved={saved} onSaved={setSaved} />
-            <details className="card !p-4 text-sm">
-              <summary className="flex cursor-pointer items-center gap-2 font-semibold"><Lightbulb size={16} className="text-brand-500" />How this was made</summary>
-              <ul className="mt-3 grid gap-1 text-muted sm:grid-cols-2">
-                <li>Total time: <b className="text-ink">{result.latency_ms} ms</b></li>
-                <li>Recipe cache: <b className="text-ink">{result.cache_hits.recipe ? 'hit (instant)' : 'miss'}</b></li>
-                <li>Pipeline: <b className="text-ink">{result.mode}</b></li>
-                <li>Fallback used: <b className="text-ink">{result.fallback_used ? 'yes (stored recipe)' : 'no'}</b></li>
-                {Object.entries(result.scores).map(([id, s]) => <li key={id}>Match {id}: <b className="text-ink">{s}</b></li>)}
-              </ul>
-            </details>
           </>
         )}
       </div>
