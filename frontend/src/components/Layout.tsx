@@ -15,7 +15,7 @@ export function Logo() {
   return (
     <span className="flex items-center gap-2 font-display text-xl font-bold">
       <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-500 text-white shadow-soft"><ChefHat size={20} /></span>
-      Snap<span className="text-brand-500">2</span>Cook
+      Fork<span className="text-brand-500">Lens</span>
     </span>
   )
 }
