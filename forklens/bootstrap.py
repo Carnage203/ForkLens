@@ -3,22 +3,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from snap2cook.cache import Cache, FileCache, LRUCache, TieredCache
-from snap2cook.config import Settings
-from snap2cook.gemini import build_client, model_chain
-from snap2cook.llm import GROQ_PREFIX, OPENROUTER_PREFIX, GroqClient, OpenRouterClient
-from snap2cook.limiter import RateLimiter
-from snap2cook.pipeline import Pipeline
-from snap2cook.rag.corpus import Corpus
-from snap2cook.rag.embedder import GeminiEmbedder, LexicalEmbedder
-from snap2cook.rag.generator import GeminiGenerator, VerbatimGenerator
-from snap2cook.rag.reranker import CoverageReranker
-from snap2cook.rag.retriever import Retriever
-from snap2cook.rag.store import HFDatasetStore, LocalStore, load_with_fallback
-from snap2cook.tiers import Pantry
-from snap2cook.vision.gemini_provider import GeminiVisionProvider
-from snap2cook.vision.mock_provider import MockVisionProvider
-from snap2cook.vision.normalizer import IngredientNormalizer
+from forklens.cache import Cache, FileCache, LRUCache, TieredCache
+from forklens.config import Settings
+from forklens.gemini import build_client, model_chain
+from forklens.llm import GROQ_PREFIX, OPENROUTER_PREFIX, GroqClient, OpenRouterClient
+from forklens.limiter import RateLimiter
+from forklens.pipeline import Pipeline
+from forklens.rag.corpus import Corpus
+from forklens.rag.embedder import GeminiEmbedder, LexicalEmbedder
+from forklens.rag.generator import GeminiGenerator, VerbatimGenerator
+from forklens.rag.reranker import CoverageReranker
+from forklens.rag.retriever import Retriever
+from forklens.rag.store import HFDatasetStore, LocalStore, load_with_fallback
+from forklens.tiers import Pantry
+from forklens.vision.gemini_provider import GeminiVisionProvider
+from forklens.vision.mock_provider import MockVisionProvider
+from forklens.vision.normalizer import IngredientNormalizer
 
 
 @dataclass(frozen=True)

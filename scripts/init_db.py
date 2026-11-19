@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from backend.db.session import Database
-from snap2cook.config import Settings
+from forklens.config import Settings
 
 
 def main() -> None:

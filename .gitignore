@@ -27,7 +27,7 @@ htmlcov/
 logs/
 *.log
 .cache/
-snap2cook_cache/
+forklens_cache/
 
 # --- Editor / OS files ---
 .vscode/

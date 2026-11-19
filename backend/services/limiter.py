@@ -9,10 +9,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from backend.db.models import Event, day_of, utcnow
 from backend.db.session import Database
-from snap2cook.exceptions import RateLimitExceededError
-from snap2cook.limiter import RateLimiter
+from forklens.exceptions import RateLimitExceededError
+from forklens.limiter import RateLimiter
 
-log = logging.getLogger("snap2cook.dblimiter")
+log = logging.getLogger("forklens.dblimiter")
 
 
 class DbRateLimiter(RateLimiter):

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from PIL import Image, ImageOps, UnidentifiedImageError
 
-from snap2cook.exceptions import InvalidImageError
+from forklens.exceptions import InvalidImageError
 
 MAX_BYTES = 5 * 1024 * 1024
 MAX_SIDE = 768

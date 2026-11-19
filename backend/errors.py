@@ -8,21 +8,21 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from snap2cook.exceptions import (CorpusLoadError, FileOperationError, GenerationError, InvalidImageError,
-                                  NoIngredientsDetectedError, RateLimitExceededError, Snap2CookError,
+from forklens.exceptions import (CorpusLoadError, FileOperationError, GenerationError, InvalidImageError,
+                                  NoIngredientsDetectedError, RateLimitExceededError, ForkLensError,
                                   UnsupportedTierError, VisionProviderError)
 
-log = logging.getLogger("snap2cook.api")
+log = logging.getLogger("forklens.api")
 
 
-class AdminAuthError(Snap2CookError):
+class AdminAuthError(ForkLensError):
     """Wrong admin credentials."""
 
     default_user_message = "Invalid credentials."
 
 
 # domain exception -> (HTTP status, machine code); the first isinstance match wins
-STATUS_MAP: list[tuple[type[Snap2CookError], int, str]] = [
+STATUS_MAP: list[tuple[type[ForkLensError], int, str]] = [
     (RateLimitExceededError, 429, "rate_limited"),
     (AdminAuthError, 401, "invalid_credentials"),
     (InvalidImageError, 400, "invalid_image"),
@@ -47,8 +47,8 @@ def envelope(request: Request, code: str, message: str, status: int, **extra: ob
 def install_error_handlers(app: FastAPI) -> None:
     """Register handlers so the UI always receives a friendly, structured message."""
 
-    @app.exception_handler(Snap2CookError)
-    async def domain_error(request: Request, exc: Snap2CookError) -> JSONResponse:
+    @app.exception_handler(ForkLensError)
+    async def domain_error(request: Request, exc: ForkLensError) -> JSONResponse:
         status, code = next(((s, c) for cls, s, c in STATUS_MAP if isinstance(exc, cls)), (500, "internal_error"))
         log.warning("domain error %s: %s", code, exc.message)
         extra = {"retry_after": exc.retry_after} if isinstance(exc, RateLimitExceededError) else {}

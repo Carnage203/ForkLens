@@ -7,13 +7,13 @@ from google import genai
 from google.genai import types
 from pydantic import ValidationError
 
-from snap2cook.exceptions import NoIngredientsDetectedError, VisionProviderError
-from snap2cook.gemini import call_with_model_fallback
-from snap2cook.llm import GROQ_PREFIX, OPENROUTER_PREFIX, ChatClient
-from snap2cook.models import DetectedIngredient, DetectionResult
-from snap2cook.vision.base import VisionProvider
+from forklens.exceptions import NoIngredientsDetectedError, VisionProviderError
+from forklens.gemini import call_with_model_fallback
+from forklens.llm import GROQ_PREFIX, OPENROUTER_PREFIX, ChatClient
+from forklens.models import DetectedIngredient, DetectionResult
+from forklens.vision.base import VisionProvider
 
-log = logging.getLogger("snap2cook.vision")
+log = logging.getLogger("forklens.vision")
 JSON_INSTRUCTION = ('Reply with ONLY one JSON object like {"ingredients": [{"name": "egg", "confidence": 0.9}]} '
                     "using exactly those keys.")
 FAST_THINKING = types.ThinkingConfig(thinking_level="low")  # naming foods needs no deep reasoning

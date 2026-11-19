@@ -1,7 +1,7 @@
 """Groq fallback: chain ordering, JSON extraction, and dispatch inside the model loop."""
-from snap2cook.gemini import call_with_model_fallback, model_chain
-from snap2cook.exceptions import GenerationError
-from snap2cook.llm import ChatHTTPError, extract_json, is_groq
+from forklens.gemini import call_with_model_fallback, model_chain
+from forklens.exceptions import GenerationError
+from forklens.llm import ChatHTTPError, extract_json, is_groq
 
 
 def test_chain_puts_groq_right_after_primary() -> None:
@@ -38,14 +38,14 @@ def test_failed_model_is_skipped_during_cooldown() -> None:
 
 
 def test_settings_accept_both_openrouter_key_spellings() -> None:
-    from snap2cook.config import Settings
+    from forklens.config import Settings
     assert Settings.load({"Open_Router_API_KEY": "k1"}).openrouter_api_key == "k1"
     assert Settings.load({"OPENROUTER_API_KEY": "k2"}).openrouter_api_key == "k2"
 
 
 def test_vision_chain_routes_by_prefix_and_falls_back() -> None:
-    from snap2cook.llm import ChatClient, GROQ_PREFIX, OPENROUTER_PREFIX
-    from snap2cook.vision.gemini_provider import GeminiVisionProvider
+    from forklens.llm import ChatClient, GROQ_PREFIX, OPENROUTER_PREFIX
+    from forklens.vision.gemini_provider import GeminiVisionProvider
 
     class Fake(ChatClient):
         def __init__(self, prefix: str, fail: bool) -> None:

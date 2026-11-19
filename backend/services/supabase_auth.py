@@ -9,7 +9,7 @@ from dataclasses import dataclass
 
 import requests
 
-log = logging.getLogger("snap2cook.auth")
+log = logging.getLogger("forklens.auth")
 
 
 @dataclass(frozen=True)

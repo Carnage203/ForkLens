@@ -13,13 +13,13 @@ from backend.errors import install_error_handlers
 from backend.middleware import RequestLogMiddleware
 from backend.routers import admin, cron, library, public
 from backend.services.hub import ServiceHub
-from snap2cook.config import Settings
+from forklens.config import Settings
 
 
 def create_app(settings: Settings | None = None, db: Database | None = None) -> FastAPI:
     """Build the app. ``settings``/``db`` can be injected (tests); otherwise they come from the environment."""
     settings = settings or Settings.load()
-    app = FastAPI(title="Snap2Cook API", version=public.VERSION, docs_url="/api/docs" if settings.env == "dev" else None,
+    app = FastAPI(title="ForkLens API", version=public.VERSION, docs_url="/api/docs" if settings.env == "dev" else None,
                   redoc_url=None, openapi_url="/api/openapi.json" if settings.env == "dev" else None)
     app.state.hub = ServiceHub(settings, db)
     app.add_middleware(GZipMiddleware, minimum_size=1024)

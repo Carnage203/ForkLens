@@ -10,10 +10,10 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import Any, Callable
 
-from snap2cook.exceptions import FileOperationError
-from snap2cook.fileio.safe_io import SafeFile
+from forklens.exceptions import FileOperationError
+from forklens.fileio.safe_io import SafeFile
 
-log = logging.getLogger("snap2cook.cache")
+log = logging.getLogger("forklens.cache")
 
 
 class Cache(ABC):

@@ -6,9 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable
 
-from snap2cook.exceptions import UnsupportedTierError
-from snap2cook.fileio.safe_io import SafeFile
-from snap2cook.models import ALL_TECHNIQUES, HOSTEL_TECHNIQUES, Conditions, Recipe
+from forklens.exceptions import UnsupportedTierError
+from forklens.fileio.safe_io import SafeFile
+from forklens.models import ALL_TECHNIQUES, HOSTEL_TECHNIQUES, Conditions, Recipe
 
 _DIET_OK = {
     "any": {"veg", "vegan", "egg", "non-veg"},

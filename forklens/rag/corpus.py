@@ -5,9 +5,9 @@ from typing import Iterator
 
 import numpy as np
 
-from snap2cook.exceptions import CorpusLoadError
-from snap2cook.models import Conditions, Recipe
-from snap2cook.tiers import Tier
+from forklens.exceptions import CorpusLoadError
+from forklens.models import Conditions, Recipe
+from forklens.tiers import Tier
 
 
 class Corpus:

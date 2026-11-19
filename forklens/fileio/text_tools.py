@@ -6,7 +6,7 @@ import re
 import tempfile
 from pathlib import Path
 
-from snap2cook.fileio.safe_io import SafeFile
+from forklens.fileio.safe_io import SafeFile
 
 
 class FileTextProcessor:

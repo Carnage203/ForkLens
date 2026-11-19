@@ -3,18 +3,18 @@ from __future__ import annotations
 
 import pytest
 
-from snap2cook.cache import LRUCache, TieredCache
-from snap2cook.config import Settings
-from snap2cook.limiter import RateLimiter
-from snap2cook.pipeline import Pipeline
-from snap2cook.rag.embedder import LexicalEmbedder
-from snap2cook.rag.generator import Generator, VerbatimGenerator
-from snap2cook.rag.reranker import CoverageReranker
-from snap2cook.rag.retriever import Retriever
-from snap2cook.rag.store import LocalStore
-from snap2cook.tiers import Pantry, TierFactory
-from snap2cook.vision.mock_provider import MockVisionProvider
-from snap2cook.vision.normalizer import IngredientNormalizer
+from forklens.cache import LRUCache, TieredCache
+from forklens.config import Settings
+from forklens.limiter import RateLimiter
+from forklens.pipeline import Pipeline
+from forklens.rag.embedder import LexicalEmbedder
+from forklens.rag.generator import Generator, VerbatimGenerator
+from forklens.rag.reranker import CoverageReranker
+from forklens.rag.retriever import Retriever
+from forklens.rag.store import LocalStore
+from forklens.tiers import Pantry, TierFactory
+from forklens.vision.mock_provider import MockVisionProvider
+from forklens.vision.normalizer import IngredientNormalizer
 
 
 @pytest.fixture(scope="session")

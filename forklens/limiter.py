@@ -6,7 +6,7 @@ import time
 from collections import defaultdict, deque
 from typing import Callable
 
-from snap2cook.exceptions import RateLimitExceededError
+from forklens.exceptions import RateLimitExceededError
 
 
 class RateLimiter:

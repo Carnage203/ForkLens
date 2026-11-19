@@ -11,12 +11,12 @@ import time
 
 import numpy as np
 
-from snap2cook.config import Settings
-from snap2cook.exceptions import Snap2CookError
-from snap2cook.fileio.safe_io import SafeFile
-from snap2cook.gemini import build_client
-from snap2cook.rag.embedder import GeminiEmbedder
-from snap2cook.rag.store import CorpusStore, LocalStore
+from forklens.config import Settings
+from forklens.exceptions import ForkLensError
+from forklens.fileio.safe_io import SafeFile
+from forklens.gemini import build_client
+from forklens.rag.embedder import GeminiEmbedder
+from forklens.rag.store import CorpusStore, LocalStore
 
 BATCH = 20
 PAUSE_S = 2.0
@@ -43,7 +43,7 @@ def main() -> int:
         SafeFile(settings.data_dir / "embeddings.npy").write_bytes(buffer.getvalue())
         SafeFile(settings.data_dir / "meta.json").write_json(
             {"embed_model": settings.embed_model, "dim": settings.embed_dim, "count": len(recipes)})
-    except Snap2CookError as exc:
+    except ForkLensError as exc:
         print(f"Failed: {exc}")
         return 1
     print(f"Wrote embeddings {matrix.shape} to {settings.data_dir}")

@@ -10,11 +10,11 @@ from typing import Callable, TypeVar
 from google import genai
 from google.genai import types
 
-from snap2cook.config import Settings
-from snap2cook.exceptions import Snap2CookError
-from snap2cook.llm import GROQ_PREFIX
+from forklens.config import Settings
+from forklens.exceptions import ForkLensError
+from forklens.llm import GROQ_PREFIX
 
-log = logging.getLogger("snap2cook.gemini")
+log = logging.getLogger("forklens.gemini")
 T = TypeVar("T")
 
 _FATAL_CODES = {400, 401, 403, 404}
@@ -30,7 +30,7 @@ def build_client(settings: Settings) -> genai.Client:
                         http_options=types.HttpOptions(timeout=settings.api_timeout_s * 1000))
 
 
-def call_with_retries(call: Callable[[], T], error_cls: type[Snap2CookError], what: str,
+def call_with_retries(call: Callable[[], T], error_cls: type[ForkLensError], what: str,
                       retries: int = 2, sleep: Callable[[float], None] = time.sleep) -> T:
     """Run ``call`` with exponential backoff + jitter, mapping failures to ``error_cls``.
 
@@ -39,7 +39,7 @@ def call_with_retries(call: Callable[[], T], error_cls: type[Snap2CookError], wh
     for attempt in range(retries + 1):
         try:
             return call()
-        except Snap2CookError:
+        except ForkLensError:
             raise
         except Exception as exc:  # SDK raises many types; all are mapped here
             code = getattr(exc, "code", None)
@@ -63,13 +63,13 @@ def model_chain(primary: str, fallbacks: tuple[str, ...], groq_models: tuple[str
     return tuple(dict.fromkeys(m for m in (primary, *groq, *fallbacks) if m))
 
 
-def call_with_model_fallback(models: tuple[str, ...], call: Callable[[str], T], error_cls: type[Snap2CookError],
+def call_with_model_fallback(models: tuple[str, ...], call: Callable[[str], T], error_cls: type[ForkLensError],
                              what: str, retries: int = 2) -> T:
     """Try each model in order; move to the next one when a model fails (overload, quota, bad name).
 
     Models before the last get no retries (switching model is the retry); the last gets the full policy.
     """
-    last_error: Snap2CookError | None = None
+    last_error: ForkLensError | None = None
     for index, model in enumerate(models):
         last = index == len(models) - 1
         if not last and _cooldown_until.get(model, 0.0) > time.monotonic():

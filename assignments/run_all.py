@@ -1,9 +1,9 @@
 """Print every syllabus demo (for the viva):  python -m assignments.run_all"""
 from __future__ import annotations
 
-from snap2cook import exceptions
-from snap2cook.analytics import series
-from snap2cook.fileio import safe_io, text_tools
+from forklens import exceptions
+from forklens.analytics import series
+from forklens.fileio import safe_io, text_tools
 
 DEMOS = (
     ("Q6  - Text processing (fileio/text_tools.py)", text_tools.demo),

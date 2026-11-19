@@ -14,7 +14,7 @@ from sqlalchemy.pool import NullPool, StaticPool
 
 from backend.db.models import Base
 
-log = logging.getLogger("snap2cook.db")
+log = logging.getLogger("forklens.db")
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 

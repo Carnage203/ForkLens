@@ -42,7 +42,7 @@ export default function Layout() {
       {configError && <div className="mx-auto mt-4 max-w-5xl px-4"><div className="card flex items-center gap-3 !border-red-300 text-red-700"><AlertTriangle size={18} />{configError}</div></div>}
       <main className="mx-auto max-w-5xl px-4 py-6"><Outlet /></main>
       <footer className="mx-auto hidden max-w-5xl px-4 pb-6 text-center text-xs text-muted md:block">
-        Snap2Cook v{config?.version ?? '2'} - made for students who just want to eat. <NavLink to="/about" className="underline">About</NavLink>
+        ForkLens v{config?.version ?? '2'} - made for students who just want to eat. <NavLink to="/about" className="underline">About</NavLink>
       </footer>
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden" aria-label="Main mobile">
         <div className="mx-auto flex max-w-md justify-around px-2 py-1.5">

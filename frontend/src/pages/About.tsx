@@ -13,7 +13,7 @@ export default function About() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <div className="space-y-3"><h1 className="text-4xl font-bold">Cooking for people <span className="text-brand-500">without a kitchen</span></h1>
-        <p className="text-lg text-muted">Most recipe apps assume a full kitchen. Snap2Cook treats your kitchen as an input, so a hostel student with only a kettle gets kettle-safe recipes, and an honest answer when there are none.</p></div>
+        <p className="text-lg text-muted">Most recipe apps assume a full kitchen. ForkLens treats your kitchen as an input, so a hostel student with only a kettle gets kettle-safe recipes, and an honest answer when there are none.</p></div>
       <div className="grid gap-3 sm:grid-cols-2">
         {STEPS.map(s => <div key={s.title} className="card"><s.icon className="text-brand-500" /><h3 className="mt-2 text-lg font-bold">{s.title}</h3><p className="text-sm text-muted">{s.text}</p></div>)}
       </div>

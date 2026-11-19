@@ -9,13 +9,13 @@ from backend.db.session import Database
 from backend.services.cache import DbCache
 from backend.services.limiter import DbRateLimiter
 from backend.services.supabase_auth import SupabaseVerifier
-from snap2cook.bootstrap import App, build_app
-from snap2cook.cache import LRUCache, TieredCache
-from snap2cook.config import Settings
-from snap2cook.logging_setup import setup_logging
-from snap2cook.models import Recipe
+from forklens.bootstrap import App, build_app
+from forklens.cache import LRUCache, TieredCache
+from forklens.config import Settings
+from forklens.logging_setup import setup_logging
+from forklens.models import Recipe
 
-log = logging.getLogger("snap2cook.hub")
+log = logging.getLogger("forklens.hub")
 
 
 @dataclass(frozen=True)

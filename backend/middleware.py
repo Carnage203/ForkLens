@@ -12,9 +12,9 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from backend.db.models import Owner, RequestLog
 from backend.services.hub import ServiceHub
-from snap2cook.logging_setup import new_request_id
+from forklens.logging_setup import new_request_id
 
-log = logging.getLogger("snap2cook.requests")
+log = logging.getLogger("forklens.requests")
 SKIP = {"/api/health"}
 SECURITY_HEADERS = [(b"x-content-type-options", b"nosniff"), (b"x-frame-options", b"DENY"),
                     (b"referrer-policy", b"strict-origin-when-cross-origin"),
@@ -59,7 +59,7 @@ class RequestLogMiddleware:
     def _write(self, scope: Scope, status: int, ms: int, request_id: str, owner_id: str | None, error: str | None) -> None:
         headers = {k.decode(): v.decode() for k, v in scope["headers"]}
         ip = headers.get("x-forwarded-for", "").split(",")[0].strip() or (scope["client"][0] if scope.get("client") else "")
-        salt = self._hub.settings.admin_jwt_secret or "snap2cook"
+        salt = self._hub.settings.admin_jwt_secret or "forklens"
         try:
             with self._hub.services.db.session() as session:
                 session.add(RequestLog(request_id=request_id, method=scope["method"], path=scope["path"][:200], status=status,
